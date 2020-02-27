@@ -1,0 +1,4 @@
+#NOTE: This is an Aether internal implementation file, its format can be changed without prior notice.
+#Thu Mar 14 10:01:55 CST 2019
+maven-install-plugin-2.4.jar>archiva.default=
+maven-install-plugin-2.4.pom>archiva.default=

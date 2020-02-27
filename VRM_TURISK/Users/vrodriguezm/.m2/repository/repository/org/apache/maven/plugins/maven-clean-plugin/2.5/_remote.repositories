@@ -1,0 +1,4 @@
+#NOTE: This is an Aether internal implementation file, its format can be changed without prior notice.
+#Thu Mar 14 10:01:36 CST 2019
+maven-clean-plugin-2.5.jar>archiva.default=
+maven-clean-plugin-2.5.pom>archiva.default=

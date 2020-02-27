@@ -1,0 +1,4 @@
+#NOTE: This is an Aether internal implementation file, its format can be changed without prior notice.
+#Thu Mar 14 10:03:12 CST 2019
+@default-archiva.default-http\://10.1.12.15\:8080/repository/internal/.lastUpdated=1552579392495
+http\://10.1.12.15\:8080/repository/internal/.error=Could not transfer artifact org.springframework\:spring-aop\:pom\:4.3.12.RELEASE from/to archiva.default (http\://10.1.12.15\:8080/repository/internal)\: D\:\\DOCUMENTOS\\PROYECTOS_VRM\\GIT_VIA_VRM_09\\FXE_ACCO\\FXE_ACCO\\Users\\vrodriguezm\\.m2\\repository\\repository\\org\\springframework\\spring-aop\\4.3.12.RELEASE\\aether-ff7a828b-30cb-458f-ab60-79457774f3fe-spring-aop-4.3.12.RELEASE.pom-in-progress (El sistema no puede encontrar el archivo especificado)

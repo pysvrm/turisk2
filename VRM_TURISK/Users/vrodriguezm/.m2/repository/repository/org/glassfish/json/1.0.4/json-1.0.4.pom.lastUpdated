@@ -1,0 +1,4 @@
+#NOTE: This is an Aether internal implementation file, its format can be changed without prior notice.
+#Thu Mar 14 10:04:02 CST 2019
+@default-archiva.default-http\://10.1.12.15\:8080/repository/internal/.lastUpdated=1552579442054
+http\://10.1.12.15\:8080/repository/internal/.error=Could not transfer artifact org.glassfish\:json\:pom\:1.0.4 from/to archiva.default (http\://10.1.12.15\:8080/repository/internal)\: D\:\\DOCUMENTOS\\PROYECTOS_VRM\\GIT_VIA_VRM_09\\FXE_ACCO\\FXE_ACCO\\Users\\vrodriguezm\\.m2\\repository\\repository\\org\\glassfish\\json\\1.0.4\\aether-da6db810-5a04-44de-8d96-0feada6a819f-json-1.0.4.pom-in-progress (El sistema no puede encontrar el archivo especificado)

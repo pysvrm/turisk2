@@ -1,0 +1,4 @@
+#NOTE: This is an Aether internal implementation file, its format can be changed without prior notice.
+#Thu Mar 14 10:16:52 CST 2019
+@default-archiva.default-http\://10.1.12.15\:8080/repository/internal/.lastUpdated=1552580212242
+http\://10.1.12.15\:8080/repository/internal/.error=Could not transfer artifact org.slf4j\:jcl-over-slf4j\:pom\:1.7.25 from/to archiva.default (http\://10.1.12.15\:8080/repository/internal)\: Failed to transfer http\://10.1.12.15\:8080/repository/internal/org/slf4j/jcl-over-slf4j/1.7.25/jcl-over-slf4j-1.7.25.pom. Error code 500, Unable to fetch artifact resource.
