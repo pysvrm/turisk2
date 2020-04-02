@@ -1,7 +1,7 @@
 package mx.com.vrm.viai.service;
 
 import mx.com.vrm.viai.configuration.restDTO.ResponseObj;
-import mx.com.vrm.viai.model.AccoUser;
+import mx.com.vrm.viai.model.User;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -23,7 +23,7 @@ public interface UsuariosService {
 	 *            the usuario
 	 * @return true, if successful
 	 */
-	public boolean insertarUsuarios(AccoUser usuario);
+	public boolean insertarUsuarios(User usuario);
 	
 	public ResponseObj obtenerUsuarioPorNombre(String nombreUsuario); 
 }

@@ -15,22 +15,22 @@ import mx.com.vrm.viai.configuration.restDTO.eMsgResp;
 import mx.com.vrm.viai.configuration.restDTO.eTypeError;
 import mx.com.vrm.viai.dao.UsuariosDAO;
 import mx.com.vrm.viai.exceptions.ServiceException;
-import mx.com.vrm.viai.model.AccoUser;
+import mx.com.vrm.viai.model.User;
 
 // TODO: Auto-generated Javadoc
 /**
  * The Class UsuariosDAOImpl.
  */
 @Repository
-public class UsuariosDAOImpl extends CrudDataManagerImpl<AccoUser, Serializable> implements UsuariosDAO {
+public class UsuariosDAOImpl extends CrudDataManagerImpl<User, Serializable> implements UsuariosDAO {
 
 	/** The Constant logger. */
 	private static final Logger logger = LoggerFactory.getLogger(UsuariosDAOImpl.class);
 	private ResponseObj responseObj = new ResponseObj();
 
 	/** The lista usuarios. */
-	public List<AccoUser> listaUsuarios = new ArrayList<AccoUser>();
-	public AccoUser usuario = new AccoUser();
+	public List<User> listaUsuarios = new ArrayList<User>();
+	public User usuario = new User();
 
 	/*
 	 * (non-Javadoc)
@@ -40,7 +40,7 @@ public class UsuariosDAOImpl extends CrudDataManagerImpl<AccoUser, Serializable>
 	public ResponseObj obtenerUsuarios() {
 		try {
 			listaUsuarios = manager
-					.createQuery("SELECT uu FROM User uu, UserRole rr WHERE uu.id.idusers = rr.iduserRoles", AccoUser.class)
+					.createQuery("SELECT uu FROM User uu, UserRole rr WHERE uu.id.idusers = rr.iduserRoles", User.class)
 					.getResultList();
 		} catch (Exception e) {
 			throw new ServiceException(eCodResp.KO_BAD_RSP, eMsgResp.BAD_RSP_BD, responseObj.getResponse());
@@ -57,7 +57,7 @@ public class UsuariosDAOImpl extends CrudDataManagerImpl<AccoUser, Serializable>
 	 * User)
 	 */
 	@Override
-	public boolean insertarUsuarios(AccoUser usuario) {
+	public boolean insertarUsuarios(User usuario) {
 		try {
 			logger.info("::Insertar Usuario::");
 			create(usuario);
@@ -71,8 +71,8 @@ public class UsuariosDAOImpl extends CrudDataManagerImpl<AccoUser, Serializable>
 	@Override
 	public ResponseObj obtenerUsuarioPorNombre(String nombreUsuario) {
 		try {
-			usuario = (AccoUser) manager
-					.createQuery("SELECT uu.id, uu.correo FROM AccoUser uu, AccoUserRole rr WHERE uu.id.idusers ="+nombreUsuario, AccoUser.class);
+			usuario = (User) manager
+					.createQuery("SELECT uu.id, uu.correo FROM User uu, UserRole rr WHERE uu.id.idusers ="+nombreUsuario, User.class);
 		} catch (Exception e) {
 			throw new ServiceException(eCodResp.KO_BAD_RSP, eMsgResp.BAD_RSP_BD, responseObj.getResponse());
 		}

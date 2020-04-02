@@ -73,6 +73,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 		.access("hasRole('ROLE_ANONYMOUS')")
 		.antMatchers("/principal/**")
 		.access("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
+		.antMatchers("/**").permitAll()
 		.antMatchers("/resources/**").permitAll()
 		.anyRequest().authenticated().and().formLogin().loginPage("/home").usernameParameter("ssoId")
 		.passwordParameter("password").defaultSuccessUrl("/principal").and().exceptionHandling()

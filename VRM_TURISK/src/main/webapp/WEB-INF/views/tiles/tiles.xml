@@ -29,6 +29,12 @@
 		<put-attribute name="title" value="Login VRM_TURISK" />
 		<put-attribute name="body" value="/WEB-INF/views/login/login.jsp" />
 	</definition>
+	
+	<!-- Login Page -->
+	<definition name="tours" extends="base-definitionHome">
+		<put-attribute name="title" value="Tours VRM_TURISK" />
+		<put-attribute name="body" value="/WEB-INF/views/pages/tours.jsp" />
+	</definition>
 
 	<!-- Accesdenied Page -->
 	<definition name="Access_Denied" extends="base-definitionHome">

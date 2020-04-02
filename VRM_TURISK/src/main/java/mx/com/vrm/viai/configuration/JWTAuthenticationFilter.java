@@ -57,8 +57,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
 			throws AuthenticationException {
 		try {
-			mx.com.vrm.viai.model.AccoUser credenciales = new ObjectMapper().readValue(request.getInputStream(),
-					mx.com.vrm.viai.model.AccoUser.class);
+			mx.com.vrm.viai.model.User credenciales = new ObjectMapper().readValue(request.getInputStream(),
+					mx.com.vrm.viai.model.User.class);
 
 			return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
 					credenciales.getUsername(), credenciales.getPassword(), new ArrayList()));

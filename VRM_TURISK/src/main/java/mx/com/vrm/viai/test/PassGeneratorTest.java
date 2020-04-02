@@ -26,12 +26,12 @@ public class PassGeneratorTest {
 	 */
 	public static void main(String[] args) {
 			BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-			System.out.println(passwordEncoder.encode(":cc9O71U"));
+			//System.out.println(passwordEncoder.encode("12345678"));
 
 
 			
 			//boolean isPasswordMatches = false;
-			//System.out.println(passwordEncoder.matches("12345678", "$2a$10$Zfp9ujuOO1f3x8Wm6LvBZevPKxWXP5Ki24Xr/Zc2IH5pTK/zsRJrG"));
+			System.out.println(passwordEncoder.matches("12345678", "$2a$10$WTFH4PN/reRmztejIa7eye/jIpRwU2hxfUXq1DjN2Tf6rXqpvL3n2"));
 		}
 	
 

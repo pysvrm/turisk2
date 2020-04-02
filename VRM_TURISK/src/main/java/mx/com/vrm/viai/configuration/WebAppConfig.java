@@ -102,16 +102,12 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
 	@Bean
 	public DataSource dataSource() {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
-		// dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-		dataSource.setDriverClassName("oracle.jdbc.driver.OracleDriver");
+		dataSource.setDriverClassName("com.mysql.jdbc.Driver");
 		// LOCAL -CV
-		// dataSource.setUrl("jdbc:mysql://localhost:3306/vrm_viai?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC");
-		String url = "jdbc:oracle:thin:" +"@10.1.4.130:1529/SICOPMF"; 
-		String usuario = "nct";
-		String password = "f3rr0m3x";
-		dataSource.setUrl(url);
-		dataSource.setUsername(usuario);
-		dataSource.setPassword(password);
+		dataSource.setUrl(
+				"jdbc:mysql://localhost:3306/vrm_viai?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC");
+		dataSource.setUsername("root");
+		dataSource.setPassword("admin");
 		return dataSource;
 	}
 
@@ -147,7 +143,7 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
 	 */
 	Properties additionalProperties() {
 		Properties properties = new Properties();
-		properties.setProperty("hibernate.hbm2ddl.auto", "update");
+		properties.setProperty("hibernate.hbm2ddl.auto", "none");
 		properties.setProperty("hibernate.enable_lazy_load_no_trans", "true");
 
 		// TODO:Otras propiedades que se pueden habilitar.
@@ -164,7 +160,7 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
 		 * environment.getRequiredProperty("hibernate.generate_statistics"));
 		 */
 
-		properties.setProperty("hibernate.dialect", "org.hibernate.dialect.OracleDialect");
+		properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
 		return properties;
 	}
 
@@ -204,9 +200,9 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
 	public UserDetailsService userDetailsService() {
 		JdbcDaoImpl jdbcImpl = new JdbcDaoImpl();
 		jdbcImpl.setDataSource(dataSource());
-		jdbcImpl.setUsersByUsernameQuery(" select username, password, enabled from Acco_Users where username=LOWER(?)");
-		jdbcImpl.setAuthoritiesByUsernameQuery("select b.username, a.rol from Acco_User_Roles a, Acco_Users b "
-				+ " where b.username=LOWER(?) and  a.IDUSER_ROLES=b.USER_ROLES_IDUSER_ROLES ");
+		jdbcImpl.setUsersByUsernameQuery("select username,password, enabled from users where username=?");
+		jdbcImpl.setAuthoritiesByUsernameQuery("select b.username, a.rol from user_roles a, users b "
+				+ " where b.username=? and a.iduser_roles=b.user_roles_id;");
 		return jdbcImpl;
 	}
 }

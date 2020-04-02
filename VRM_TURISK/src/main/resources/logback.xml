@@ -12,15 +12,15 @@
 	<!-- Send debug messages to a file at "c:/jcg.log" -->
 	<appender name="FILE"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<!--<file>/Users/vrodriguezm/home/vrodriguezm/Documentos/logs/apps/viai/logs/VIAI_L4j.log</file>-->
-		<file>/home/ewsuser/logs/VIAI_L4j.log</file>
+		<!--<file>/Users/vrodriguezm/home/vrodriguezm/Documentos/logs/apps/VRM_TURISK/logs/VRM_TURISK_L4j.log</file>-->
+		<file>/home/ewsuser/logs/VRM_TURISK_L4j.log</file>
 		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
 			<Pattern>%d{yyyy-MM-dd_HH:mm:ss.SSS} [%thread] %-5level %logger{36} -
 				%msg%n</Pattern>
 		</encoder>
 
 		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-			<FileNamePattern>/home/ewsuser/logs/VIAI_L4j.log.%i.log.zip</FileNamePattern>
+			<FileNamePattern>/home/ewsuser/logs/VRM_TURISK_L4j.log.%i.log.zip</FileNamePattern>
 			<MinIndex>1</MinIndex>
 			<MaxIndex>10</MaxIndex>
 		</rollingPolicy>

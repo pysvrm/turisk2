@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import mx.com.vrm.viai.configuration.restDTO.ResponseObj;
 import mx.com.vrm.viai.dao.UsuariosDAO;
-import mx.com.vrm.viai.model.AccoUser;
+import mx.com.vrm.viai.model.User;
 import mx.com.vrm.viai.service.UsuariosService;
 
 // TODO: Auto-generated Javadoc
@@ -39,7 +39,7 @@ public class UsuarioServiceImpl implements UsuariosService {
 	 * model.User)
 	 */
 	@Override
-	public boolean insertarUsuarios(AccoUser usuario) {
+	public boolean insertarUsuarios(User usuario) {
 		return usuariosDAO.insertarUsuarios(usuario);
 	}
 

@@ -1,16 +1,9 @@
 package mx.com.vrm.viai.configuration.util;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Formatter;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import mx.com.vrm.viai.model.NctEqmt;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -70,30 +63,4 @@ public class Util {
 		return aComplementar;
 	}
 
-	public static List<NctEqmt> listaEquipos(String listaEquiposString) {
-		List<NctEqmt> listaEquipos = new ArrayList<NctEqmt>();
-		String[] parts = listaEquiposString.split(",");
-		try {
-			for (int cnt = 0; cnt < parts.length; cnt++) {
-				NctEqmt nuevoEquipo = new NctEqmt();
-				Pattern pinicial = Pattern.compile("[a-zA-Z]{1,4}");
-				Pattern pnumero = Pattern.compile("[^a-zA-Z]{1,6}");
-				Matcher inicialm = pinicial.matcher(parts[cnt]);
-				Matcher numerom = pnumero.matcher(parts[cnt]);
-
-				inicialm.find();
-				numerom.find();
-
-				nuevoEquipo.setEqmtInit(inicialm.group(0).trim());
-				nuevoEquipo.setEqmtNbr(new BigDecimal(numerom.group(0).trim()));
-
-				listaEquipos.add(nuevoEquipo);
-
-			}
-		} catch (Exception e) {
-			log.info("Error al obtener la lista de equipos");
-		}
-
-		return listaEquipos;
-	}
 }
