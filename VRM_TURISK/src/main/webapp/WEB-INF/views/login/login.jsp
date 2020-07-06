@@ -28,12 +28,17 @@
 							placeholder="Enter Password" required>
 					</div>
 					<input type="hidden" name="${_csrf.parameterName}"
-						value="${_csrf.token}" />
-
+						value="${_csrf.token}" /> <br>
 					<div class="form-actions">
-						<input type="submit" class="btn btn-block btn-primary btn-default"
-							value="Log in">
+						<input type="submit" class="btn btn-block btn-primary btn-default" value="Log in"> 
+						<input type="submit" class="btn btn-block btn-primaryG btn-default" value="Gmail">
 					</div>
+				</form>
+				<br>
+				
+				<c:url var="loginUrlFacebook" value="/signin/facebook" />
+				<form action="${loginUrlFacebook}" method="post" class="form-horizontal">
+					<input type="submit" class="btn btn-block btn-primaryF btn-default" value="Facebook">
 				</form>
 			</div>
 		</div>

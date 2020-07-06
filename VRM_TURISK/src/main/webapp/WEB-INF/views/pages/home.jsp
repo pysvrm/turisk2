@@ -2,707 +2,1117 @@
 <%@ include file="/WEB-INF/common/taglibs.jsp"%>
 <c:url var="home" value="/" scope="request" />
 <script>
+	var ctx = "${pageContext.request.contextPath}"
+	var xmlhttp = new XMLHttpRequest();
+
+	function modal() {
+		$('.modal').modal('show');
+		setTimeout(function() {
+			$('.modal').modal('hide');
+		});
+	}
+
+	function doAjaxPostJHE() {
+		var mensaje = confirm("\u00bf Desea reiniciar procesos JHE \77");
+
+		if (mensaje) {
+			doAjaxPostJHE0();
+		}
+	}
+
+	function doAjaxPostJHE0() {
+		$('.modal').modal('show');
+		$.ajax({
+			type : "POST",
+			url : ctx + "/reiniciaJHE",
+			success : function(response) {
+				$('.modal').modal('hide');
+			}
+		});
+	}
+
+	function doAjaxPostTAD() {
+		var mensaje = confirm("\u00bf Desea reiniciar procesos TAD \77");
+
+		if (mensaje) {
+			doAjaxPostTAD0();
+		}
+	}
+
+	function doAjaxPostTAD0() {
+		$('.modal').modal('show');
+		$.ajax({
+			type : "POST",
+			url : ctx + "/reiniciaTADS",
+			success : function(response) {
+				$('.modal').modal('hide');
+			}
+		});
+	}
+
+	function doAjaxPostArmadoTren() {
+		var mensaje = confirm("\u00bf Desea reiniciar procesos proceso Armando de tren \77");
+
+		if (mensaje) {
+			doAjaxPostArmadoTren0();
+		}
+	}
+
+	function doAjaxPostArmadoTren0() {
+		$('.modal').modal('show');
+		$.ajax({
+			type : "POST",
+			url : ctx + "/armadoTren",
+			success : function(response) {
+				$('.modal').modal('hide');
+			}
+		});
+	}
+
+	function doAjaxPostVerificaErrores() {
+		$('.modal').modal('show');
+		$.ajax({
+			type : "POST",
+			url : ctx + "/verificaErrores",
+			success : function(response) {
+				$('.modal').modal('hide');
+			}
+		});
+	}
+
+	function doAjaxPostArmadoTren() {
+		var mensaje = confirm("\u00bf Desea reiniciar procesos proceso Armando de tren \77");
+
+		if (mensaje) {
+			doAjaxPostArmadoTren0();
+		}
+	}
+
+	function doAjaxPostReiniciaCEO() {
+		$('#exampleModal2').modal('show');
+		$.ajax({
+			type : "POST",
+			url : ctx + "/reiniciaCeo",
+			success : function(response) {
+				$('#exampleModal2').modal('hide');
+			}
+		});
+	}
+
+	function doAjaxPostCartel0() {
+		$('#exampleModal2').modal('show');
+		$.ajax({
+			type : "POST",
+			url : ctx + "/cartel0",
+			success : function(response) {
+				$('#exampleModal2').modal('hide');
+			}
+		});
+	}
+
+	function doAjaxPostEliminaEquipo() {
+		$("#exampleModal").modal('hide');
+		var vInicial = $('#inpt-inicial').val();
+		var vNumero = $('#inpt-numero').val();
+		$('input[name="inicial"]').val(vInicial);
+		$('input[name="numero"]').val(vNumero);
+		$('#inicial').val(vInicial);
+		$('#numero').val(vNumero);
+		$.ajax({
+			type : "POST",
+			url : ctx + "/eliminaEquipo",
+			data : {
+				inicial : vInicial,
+				numero : vNumero
+			},
+			success : function(response) {
+				$("#exampleModal").modal('hide');
+			}
+		});
+	}
+	
+	function doAjaxPostEliminaEquipos() {
+		$("#exampleModal").modal('hide');
+		var vlista = $('#inpt-unidades').val();
+		$('input[name="unidades"]').val(vlista);
+		$('#unidades').val(vlista);
+		$.ajax({
+			type : "POST",
+			url : ctx + "/eliminaEquipos",
+			data : {
+				listaEquipos : vlista,
+			},
+			success : function(response) {
+				$("#exampleModalEquipos").modal('hide');
+			}
+		});
+	}
+
+
+
+	function doAjaxPostEliminaTrenDuplicado() {
+		$("#exampleModalTrenD").modal('hide');
+		var vTren = $('#inpt-tren').val();
+		var vDia = $('#inpt-dia').val();
+		var vEstacion = $('#inpt-estacion').val();
+		$('input[name="tren"]').val(vTren);
+		$('input[name="fecTren"]').val(vDia);
+		$('input[name="estacion"]').val(vEstacion);
+		$('#tren').val(vTren);
+		$('#fecTren').val(vDia);
+		$('#estacion').val(vEstacion);
+		$.ajax({
+			type : "POST",
+			url : ctx + "/eliminaTrenDuplicado",
+			data : {
+				tren : vTren,
+				fecTren : vDia,
+				estacion : vEstacion
+			},
+			success : function(response) {
+				$("#exampleModalTrenD").modal('hide');
+			}
+		});
+	}
+
+	function doAjaxPostSTSJHE() {
+
+		$('.modal').modal('show');
+		$.ajax({
+			type : "GET",
+			url : ctx + "/obtenerStatusJhe",
+			success : function(response) {
+				$('.modal').modal('hide');
+				$("#subViewDiv").load(location.href + " #subViewDiv >*", "");
+			}
+		});
+
+	}
+
+	function doAjaxPostSTSTAD() {
+		$('.modal').modal('show');
+		$.ajax({
+			type : "GET",
+			url : ctx + "/obtenerStatusTad",
+			success : function(response) {
+				$('.modal').modal('hide');
+				$("#subViewDivTad").load(location.href + " #subViewDivTad >*",
+						"");
+			}
+		});
+
+	}
 </script>
 
 <style>
+.load-spinner .modal-dialog {
+	display: table;
+	position: relative;
+	margin: 0 auto;
+	top: calc(33% - 24px);
+}
+
+.load-spinner .modal-dialog .modal-content {
+	background-color: #FFFAFA;
+	border: solid;
+	border-color: #20B2AA;
+}
+
+.table-dark {
+	font-size: 8px;
+}
 </style>
 
-<nav>
-  <body>
+<nav
+	class="navbar navbar-expand-lg bg-secondary fixed-top text-uppercase"
+	id="mainNav">
+	<div class="container">
+		<a class="navbar-brand js-scroll-trigger" href="#page-top">Start
+			MedicalSuport</a>
+		<button
+			class="navbar-toggler navbar-toggler-right text-uppercase bg-primary text-white rounded"
+			type="button" data-toggle="collapse" data-target="#navbarResponsive"
+			aria-controls="navbarResponsive" aria-expanded="false"
+			aria-label="Toggle navigation">
+			Menu <i class="fa fa-bars"></i>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarResponsive">
+			<ul class="navbar-nav ml-auto">
+				<li class="nav-item mx-0 mx-lg-1"><a
+					class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger"
+					href="#portfolio">Botiquin</a></li>
+				<li class="nav-item mx-0 mx-lg-1"><a
+					class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger"
+					href="#about">Acerca de</a></li>
+				<li class="nav-item mx-0 mx-lg-1"><a
+					class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger"
+					href="#contact">Contacto</a></li>
+				<li class="nav-item mx-0 mx-lg-1"><a
+					class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger"
+					href="<c:url value="/logout" />">Salir</a></li>
+				<li class="nav-item mx-0 mx-lg-1">
+				<sec:authorize
+						access="hasRole('ROLE_GOD')">
+						<br>
+						<a class="font-weight-light mb-0" style="color: white;">Bienvenido Vlad, eres Dios</a>
+					</sec:authorize> 
+				<sec:authorize
+						access="hasRole('ROLE_FACEBOOK')">
+						<br>
+						<a class="font-weight-light mb-0" style="color: white;">Bienvenido-Loggin by FB</a>
+					</sec:authorize> 	
+					
+				<sec:authorize access="hasRole('ROLE_USER')">
+					<br>
+					<a class="font-weight-light mb-0" style="color: white;">Bienvenido MCC</a>
+				</sec:authorize></li>
 
-     
-    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
-      <div class="container">
-        <a class="navbar-brand" href="principal">Voyage</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="oi oi-menu"></span> Menu
-        </button>
-
-        <div class="collapse navbar-collapse" id="ftco-nav">
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item active"><a href="principal" class="nav-link">Home</a></li>
-            <li class="nav-item"><a href="tours" class="nav-link">Tours</a></li>
-            <li class="nav-item"><a href="hotels.html" class="nav-link">Hotels</a></li>
-            <li class="nav-item"><a href="services.html" class="nav-link">Services</a></li>
-            <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li>
-            <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
-            <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-    <!-- END nav -->
-    
-    <section class="home-slider owl-carousel">
-      <div class="slider-item" style="background-image: url('resources/freelance/turisk/images/bg_4.jpg');">
-        <div class="overlay"></div>
-        <div class="container">
-          <div class="row slider-text align-items-center">
-            <div class="col-md-7 col-sm-12 ftco-animate">
-              <h1 class="mb-3">Experience the best trip ever</h1>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="slider-item" style="background-image: url('resources/freelance/turisk/images/bg_1.jpg');">
-        <div class="overlay"></div>
-        <div class="container">
-          <div class="row slider-text align-items-center">
-            <div class="col-md-7 col-sm-12 ftco-animate">
-              <h1 class="mb-3">Making the most out of your holiday</h1>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="slider-item" style="background-image: url('resources/freelance/turisk/images/bg_3.jpg');">
-        <div class="overlay"></div>
-        <div class="container">
-          <div class="row slider-text align-items-center">
-            <div class="col-md-7 col-sm-12 ftco-animate">
-              <h1 class="mb-3">Travel Operator Just For You</h1>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- END slider -->
-
-    <div class="ftco-section-search">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12 tabulation-search">
-            <div class="element-animate">
-              <div class="nav nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                <a class="nav-link p-3 active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true"><span>01</span> Flight</a>
-                <a class="nav-link p-3" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false"><span>02</span> Hotel</a>
-                <a class="nav-link p-3" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false"><span>03</span> Car Rent</a>
-                <a class="nav-link p-3" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab" aria-controls="v-pills-settings" aria-selected="false"><span>04</span> Cruises</a>
-              </div>
-            </div>
-              
-            <div class="tab-content py-5" id="v-pills-tabContent">
-              <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
-                <div class="block-17">
-                  <form action="" method="post" class="d-block d-lg-flex">
-                    <div class="fields d-block d-lg-flex">
-
-                      <div class="textfield-search one-third"><input type="text" class="form-control" placeholder="Search Location"></div>
-
-                      <div class="check-in one-third"><input type="text" id="checkin_date" class="form-control" placeholder="Check-in date"></div>
-
-                      <div class="check-out one-third"><input type="text" id="checkout_date" class="form-control" placeholder="Check-out date"></div>
-                      <div class="select-wrap one-third">
-                        <div class="icon"><span class="ion-ios-arrow-down"></span></div>
-                        <select name="" id="" class="form-control">
-                          <option value="">Guest</option>
-                          <option value="">1</option>
-                          <option value="">2</option>
-                          <option value="">3</option>
-                          <option value="">4+</option>
-                        </select>
-                      </div>
-                    </div>
-                    <input type="submit" class="search-submit btn btn-primary" value="Find Flights">  
-                  </form>
-                </div>
-              </div>
-              <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
-                <div class="block-17">
-                  <form action="" method="post" class="d-block d-lg-flex">
-                    <div class="fields d-block d-lg-flex">
-                      <div class="textfield-search one-third"><input type="text" class="form-control" placeholder="Search Hotel"></div>
-
-                      <div class="check-in one-third"><input type="text" id="checkin_date" class="form-control" placeholder="Check-in date"></div>
-
-                      <div class="check-out one-third"><input type="text" id="checkout_date" class="form-control" placeholder="Check-out date"></div>
-                      <div class="select-wrap one-third">
-                        <div class="icon"><span class="ion-ios-arrow-down"></span></div>
-                        <select name="" id="" class="form-control">
-                          <option value="">Guest</option>
-                          <option value="">1</option>
-                          <option value="">2</option>
-                          <option value="">3</option>
-                          <option value="">4+</option>
-                        </select>
-                      </div>
-                    </div>
-                    <input type="submit" class="search-submit btn btn-primary" value="Find Hotels">  
-                  </form>
-                </div>
-              </div>
-              <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
-                <div class="block-17">
-                  <form action="" method="post" class="d-block d-lg-flex">
-                    <div class="fields d-block d-lg-flex">
-                      <div class="textfield-search one-third"><input type="text" class="form-control" placeholder="Search Location"></div>
-
-                      <div class="check-in one-third"><input type="text" id="start_date" class="form-control" placeholder="Start date"></div>
-
-                      <div class="check-out one-third"><input type="text" id="return_date" class="form-control" placeholder="Return date"></div>
-                      <div class="select-wrap one-third">
-                        <div class="icon"><span class="ion-ios-arrow-down"></span></div>
-                        <select name="" id="" class="form-control">
-                          <option value="">Guest</option>
-                          <option value="">1</option>
-                          <option value="">2</option>
-                          <option value="">3</option>
-                          <option value="">4+</option>
-                        </select>
-                      </div>
-                    </div>
-                    <input type="submit" class="search-submit btn btn-primary" value="Find Car">  
-                  </form>
-                </div>
-              </div>
-              <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">
-                <div class="block-17">
-                  <form action="" method="post" class="d-block d-lg-flex">
-                    <div class="fields d-block d-lg-flex">
-                      <div class="textfield-search one-third one-third-1"><input type="text" class="form-control" placeholder="Search Location"></div>
-
-
-                      <div class="check-out one-third one-third-1"><input type="text" id="start_date" class="form-control" placeholder="Check-out date"></div>
-
-                      <div class="select-wrap one-third one-third-1">
-                        <div class="icon"><span class="ion-ios-arrow-down"></span></div>
-                        <select name="" id="" class="form-control">
-                          <option value="">Categories</option>
-                          <option value="">Suite</option>
-                          <option value="">Super Deluxe</option>
-                          <option value="">Balcony</option>
-                          <option value="">Economy</option>
-                          <option value="">Luxury</option>
-                        </select>
-                      </div>
-                    </div>
-                    <input type="submit" class="search-submit btn btn-primary" value="Find Cruise">  
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <section class="ftco-section-2">
-      <div class="container-fluid d-flex">
-        <div class="section-2-blocks-wrapper row no-gutters">
-          <div class="img col-sm-12 col-lg-6" style="background-image: url('resources/freelance/turisk/images/tour-1.jpg');">
-            <a href="https://vimeo.com/45830194" class="button popup-vimeo"><span class="ion-ios-play"></span></a>
-          </div>
-          <div class="text col-lg-6 ftco-animate">
-            <div class="text-inner align-self-start">
-              
-              <h3>Welcome to Bon Voyage since 1898 established Far far away.</h3>
-              <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
-
-              <p>A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="ftco-section">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-3 promo ftco-animate">
-            <a href="#" class="promo-img mb-4" style="background-image: url(resources/freelance/turisk/images/promo-1.jpg);"></a>
-            <div class="text text-center">
-              <h2>Group Cruises</h2>
-              <h3 class="price"><span>from</span> $299</h3>
-              <a href="#" class="read">Read more</a>
-            </div>
-          </div>
-          <div class="col-lg-3 promo ftco-animate">
-            <a href="#" class="promo-img mb-4" style="background-image: url(resources/freelance/turisk/images/promo-2.jpg);"></a>
-            <div class="text text-center">
-              <h2>Beach Tours</h2>
-              <h3 class="price"><span>from</span> $199</h3>
-              <a href="#" class="read">Read more</a>
-            </div>
-          </div>
-          <div class="col-lg-3 promo ftco-animate">
-            <a href="#" class="promo-img mb-4" style="background-image: url(resources/freelance/turisk/images/promo-3.jpg);"></a>
-            <div class="text text-center">
-              <h2>Mountain Tours</h2>
-              <h3 class="price"><span>from</span> $179</h3>
-              <a href="#" class="read">Read more</a>
-            </div>
-          </div>
-          <div class="col-lg-3 promo ftco-animate">
-            <a href="#" class="promo-img mb-4" style="background-image: url(resources/freelance/turisk/images/promo-3.jpg);"></a>
-            <div class="text text-center">
-              <h2>Family Tours</h2>
-              <h3 class="price"><span>from</span> $599</h3>
-              <a href="#" class="read">Read more</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="ftco-section bg-light">
-      <div class="container">
-        <div class="row justify-content-center mb-5 pb-5">
-          <div class="col-md-7 text-center heading-section ftco-animate">
-            <h2>Our Services</h2>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6 col-lg-3 d-flex align-self-stretch ftco-animate">
-            <div class="media block-6 services d-block text-center">
-              <div class="d-flex justify-content-center"><div class="icon d-flex justify-content-center mb-3"><span class="align-self-center flaticon-sailboat"></span></div></div>
-              <div class="media-body p-2">
-                <h3 class="heading">Special Activities</h3>
-                <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic.</p>
-              </div>
-            </div>      
-          </div>
-          <div class="col-md-6 col-lg-3 d-flex align-self-stretch ftco-animate">
-            <div class="media block-6 services d-block text-center">
-              <div class="d-flex justify-content-center"><div class="icon d-flex justify-content-center mb-3"><span class="align-self-center flaticon-around"></span></div></div>
-              <div class="media-body p-2">
-                <h3 class="heading">Travel Arrangements</h3>
-                <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic.</p>
-              </div>
-            </div>      
-          </div>
-          <div class="col-md-6 col-lg-3 d-flex align-self-stretch ftco-animate">
-            <div class="media block-6 services d-block text-center">
-              <div class="d-flex justify-content-center"><div class="icon d-flex justify-content-center mb-3"><span class="align-self-center flaticon-compass"></span></div></div>
-              <div class="media-body p-2">
-                <h3 class="heading">Private Guide</h3>
-                <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic.</p>
-              </div>
-            </div>    
-          </div>
-
-          <div class="col-md-6 col-lg-3 d-flex align-self-stretch ftco-animate">
-            <div class="media block-6 services d-block text-center">
-              <div class="d-flex justify-content-center"><div class="icon d-flex justify-content-center mb-3"><span class="align-self-center flaticon-map-of-roads"></span></div></div>
-              <div class="media-body p-2">
-                <h3 class="heading">Location Manager</h3>
-                <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic.</p>
-              </div>
-            </div>      
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="ftco-section">
-      <div class="container-fluid">
-        <div class="row no-gutters justify-content-center mb-5 pb-5 ftco-animate">
-          <div class="col-md-7 text-center heading-section">
-            <h2>Most Popular Destination</h2>
-          </div>
-        </div>
-        <div class="row no-gutters">
-          <div class="col-md-6 col-lg-3 ftco-animate">
-            <a href="#" class="block-5" style="background-image: url('resources/freelance/turisk/images/tour-1.jpg');">
-              <div class="text">
-                <span class="price">$399</span>
-                <h3 class="heading">Group Tour in Maldives</h3>
-                <div class="post-meta">
-                  <span>Ameeru Ahmed Magu Male’, Maldives</span>
-                </div>
-                <p class="star-rate"><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star-half-full"></span> <span>500 reviews</span></p>
-              </div>
-            </a>
-          </div>
-          <div class="col-md-6 col-lg-3 ftco-animate">
-            <a href="#" class="block-5" style="background-image: url('resources/freelance/turisk/images/tour-2.jpg');">
-              <div class="text">
-                <span class="price">$399</span>
-                <h3 class="heading">Group Tour in Maldives</h3>
-                <div class="post-meta">
-                  <span>Ameeru Ahmed Magu Male’, Maldives</span>
-                </div>
-                <p class="star-rate"><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star-half-full"></span> <span>500 reviews</span></p>
-              </div>
-            </a>
-          </div>
-          <div class="col-md-6 col-lg-3 ftco-animate">
-            <a href="#" class="block-5" style="background-image: url('resources/freelance/turisk/images/tour-3.jpg');">
-              <div class="text">
-                <span class="price">$399</span>
-                <h3 class="heading">Group Tour in Maldives</h3>
-                <div class="post-meta">
-                  <span>Ameeru Ahmed Magu Male’, Maldives</span>
-                </div>
-                <p class="star-rate"><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star-half-full"></span> <span>500 reviews</span></p>
-              </div>
-            </a>
-          </div>
-          <div class="col-md-6 col-lg-3 ftco-animate">
-            <a href="#" class="block-5" style="background-image: url('resources/freelance/turisk/images/tour-4.jpg');">
-              <div class="text">
-                <span class="price">$399</span>
-                <h3 class="heading">Group Tour in Maldives</h3>
-                <div class="post-meta">
-                  <span>Ameeru Ahmed Magu Male’, Maldives</span>
-                </div>
-                <p class="star-rate"><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star-half-full"></span> <span>500 reviews</span></p>
-              </div>
-            </a>
-          </div>
-          <div class="col-md-6 col-lg-3 ftco-animate">
-            <a href="#" class="block-5" style="background-image: url('resources/freelance/turisk/images/tour-5.jpg');">
-              <div class="text">
-                <span class="price">$399</span>
-                <h3 class="heading">Group Tour in Maldives</h3>
-                <div class="post-meta">
-                  <span>Ameeru Ahmed Magu Male’, Maldives</span>
-                </div>
-                <p class="star-rate"><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star-half-full"></span> <span>500 reviews</span></p>
-              </div>
-            </a>
-          </div>
-          <div class="col-md-6 col-lg-3 ftco-animate">
-            <a href="#" class="block-5" style="background-image: url('resources/freelance/turisk/images/tour-6.jpg');">
-              <div class="text">
-                <span class="price">$399</span>
-                <h3 class="heading">Group Tour in Maldives</h3>
-                <div class="post-meta">
-                  <span>Ameeru Ahmed Magu Male’, Maldives</span>
-                </div>
-                <p class="star-rate"><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star-half-full"></span> <span>500 reviews</span></p>
-              </div>
-            </a>
-          </div>
-          <div class="col-md-6 col-lg-3 ftco-animate">
-            <a href="#" class="block-5" style="background-image: url('resources/freelance/turisk/images/tour-7.jpg');">
-              <div class="text">
-                <span class="price">$399</span>
-                <h3 class="heading">Group Tour in Maldives</h3>
-                <div class="post-meta">
-                  <span>Ameeru Ahmed Magu Male’, Maldives</span>
-                </div>
-                <p class="star-rate"><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star-half-full"></span> <span>500 reviews</span></p>
-              </div>
-            </a>
-          </div>
-          <div class="col-md-6 col-lg-3 ftco-animate">
-            <a href="#" class="block-5" style="background-image: url('resources/freelance/turisk/images/tour-8.jpg');">
-              <div class="text">
-                <span class="price">$399</span>
-                <h3 class="heading">Group Tour in Maldives</h3>
-                <div class="post-meta">
-                  <span>Ameeru Ahmed Magu Male’, Maldives</span>
-                </div>
-                <p class="star-rate"><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star-half-full"></span> <span>500 reviews</span></p>
-              </div>
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="ftco-section testimony-section">
-      <div class="container">
-        <div class="row justify-content-center mb-5 pb-5">
-          <div class="col-md-7 text-center heading-section ftco-animate">
-            <h2>Our Satisfied Guests says</h2>
-          </div>
-        </div>
-        <div class="row ftco-animate">
-          <div class="carousel owl-carousel ftco-owl">
-            <div class="item text-center">
-              <div class="testimony-wrap p-4 pb-5">
-                <div class="user-img mb-4" style="background-image: url(resources/freelance/turisk/images/person_1.jpg)" style="border: 1px solid red;"></div>
-                <div class="text">
-                  <p class="star-rate"><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star-half-full"></span></p>
-                  <p class="mb-5">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-                  <p class="name">Dennis Green</p>
-                  <span class="position">Guests from Italy</span>
-                </div>
-              </div>
-            </div>
-            <div class="item text-center">
-              <div class="testimony-wrap p-4 pb-5">
-                <div class="user-img mb-4" style="background-image: url(resources/freelance/turisk/images/person_2.jpg)" style="border: 1px solid red;"></div>
-                <div class="text">
-                  <p class="star-rate"><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star-half-full"></span></p>
-                  <p class="mb-5">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-                  <p class="name">Dennis Green</p>
-                  <span class="position">Guests from Italy</span>
-                </div>
-              </div>
-            </div>
-            <div class="item text-center">
-              <div class="testimony-wrap p-4 pb-5">
-                <div class="user-img mb-4" style="background-image: url(resources/freelance/turisk/images/person_3.jpg)" style="border: 1px solid red;"></div>
-                <div class="text">
-                  <p class="star-rate"><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star-half-full"></span></p>
-                  <p class="mb-5">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-                  <p class="name">Dennis Green</p>
-                  <span class="position">Guests from Italy</span>
-                </div>
-              </div>
-            </div>
-            <div class="item text-center">
-              <div class="testimony-wrap p-4 pb-5">
-                <div class="user-img mb-4" style="background-image: url(resources/freelance/turisk/images/person_1.jpg)" style="border: 1px solid red;"></div>
-                <div class="text">
-                  <p class="star-rate"><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star-half-full"></span></p>
-                  <p class="mb-5">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-                  <p class="name">Dennis Green</p>
-                  <span class="position">Guests from Italy</span>
-                </div>
-              </div>
-            </div>
-            <div class="item text-center">
-              <div class="testimony-wrap p-4 pb-5">
-                <div class="user-img mb-4" style="background-image: url(resources/freelance/turisk/images/person_1.jpg)" style="border: 1px solid red;"></div>
-                <div class="text">
-                  <p class="star-rate"><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star-half-full"></span></p>
-                  <p class="mb-5">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-                  <p class="name">Dennis Green</p>
-                  <span class="position">Guests from Italy</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="ftco-section">
-      <div class="container-fluid">
-        <div class="row mb-5 pb-5 no-gutters">
-          <div class="col-lg-4 bg-light p-3 p-md-5 d-flex align-items-center heading-section ftco-animate">
-            <div>
-              <h2 class="mb-5 pb-3">Want to get our hottest travel deals top tips and advice? Subscribe us now!</h2>
-              <form action="#" class="subscribe-form">
-                <div class="form-group">
-                  <span class="icon icon-paper-plane"></span>
-                  <input type="text" class="form-control" placeholder="Enter your email address">
-                </div>
-              </form>
-            </div>
-          </div>
-          <div class="col-lg-8 p-2 pl-md-5 heading-section">
-            <h2 class="mb-5 p-2 pb-3 ftco-animate">Most Recommended Hotels</h2>
-            <div class="row no-gutters d-flex">
-              <div class="col-md-4 ftco-animate">
-                <a href="#" class="block-5" style="background-image: url('resources/freelance/turisk/images/hotel-1.jpg');">
-                  <div class="text">
-                    <span class="price">$29/night</span>
-                    <h3 class="heading">Luxe Hotel</h3>
-                    <div class="post-meta">
-                      <span>Ameeru Ahmed Magu Male’, Maldives</span>
-                    </div>
-                    <p class="star-rate"><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star-half-full"></span> <span>500 reviews</span></p>
-                  </div>
-                </a>
-              </div>
-              <div class="col-md-4 ftco-animate">
-                <a href="#" class="block-5" style="background-image: url('resources/freelance/turisk/images/hotel-2.jpg');">
-                  <div class="text">
-                    <span class="price">$29/night</span>
-                    <h3 class="heading">Deluxe Hotel</h3>
-                    <div class="post-meta">
-                      <span>Ameeru Ahmed Magu Male’, Maldives</span>
-                    </div>
-                    <p class="star-rate"><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star-half-full"></span> <span>500 reviews</span></p>
-                  </div>
-                </a>
-              </div>
-              <div class="col-md-4 ftco-animate">
-                <a href="#" class="block-5" style="background-image: url('resources/freelance/turisk/images/hotel-3.jpg');">
-                  <div class="text">
-                    <span class="price">$29/night</span>
-                    <h3 class="heading">Deluxe Hotel</h3>
-                    <div class="post-meta">
-                      <span>Ameeru Ahmed Magu Male’, Maldives</span>
-                    </div>
-                    <p class="star-rate"><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star"></span><span class="icon-star-half-full"></span> <span>500 reviews</span></p>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="ftco-section bg-light">
-      <div class="container">
-        <div class="row justify-content-center mb-5 pb-5">
-          <div class="col-md-7 text-center heading-section ftco-animate">
-            <h2>Our Blog</h2>
-          </div>
-        </div>
-        <div class="row ftco-animate">
-          <div class="carousel1 owl-carousel ftco-owl">
-            <div class="item">
-              <div class="blog-entry">
-                <a href="blog-single.html" class="block-20" style="background-image: url('resources/freelance/turisk/images/image_5.jpg');">
-                </a>
-                <div class="text p-4">
-                  <div class="meta">
-                    <div><a href="#">July 7, 2018</a></div>
-                    <div><a href="#">Admin</a></div>
-                  </div>
-                  <h3 class="heading"><a href="#">Even the all-powerful Pointing has no control about the blind texts</a></h3>
-                  <p class="clearfix">
-                    <a href="#" class="float-left">Read more</a>
-                    <a href="#" class="float-right meta-chat"><span class="icon-chat"></span> 3</a>
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div class="item">
-              <div class="blog-entry" data-aos-delay="100">
-                <a href="blog-single.html" class="block-20" style="background-image: url('resources/freelance/turisk/images/image_6.jpg');">
-                </a>
-                <div class="text p-4">
-                  <div class="meta">
-                    <div><a href="#">July 7, 2018</a></div>
-                    <div><a href="#">Admin</a></div>
-                  </div>
-                  <h3 class="heading"><a href="#">Even the all-powerful Pointing has no control about the blind texts</a></h3>
-                  <p class="clearfix">
-                    <a href="#" class="float-left">Read more</a>
-                    <a href="#" class="float-right meta-chat"><span class="icon-chat"></span> 3</a>
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div class="item">
-              <div class="blog-entry" data-aos-delay="200">
-                <a href="blog-single.html" class="block-20" style="background-image: url('resources/freelance/turisk/images/image_7.jpg');">
-                </a>
-                <div class="text p-4">
-                  <div class="meta">
-                    <div><a href="#">July 7, 2018</a></div>
-                    <div><a href="#">Admin</a></div>
-                  </div>
-                  <h3 class="heading"><a href="#">Even the all-powerful Pointing has no control about the blind texts</a></h3>
-                  <p class="clearfix">
-                    <a href="#" class="float-left">Read more</a>
-                    <a href="#" class="float-right meta-chat"><span class="icon-chat"></span> 3</a>
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div class="item">
-              <div class="blog-entry" data-aos-delay="200">
-                <a href="blog-single.html" class="block-20" style="background-image: url('resources/freelance/turisk/images/image_8.jpg');">
-                </a>
-                <div class="text p-4">
-                  <div class="meta">
-                    <div><a href="#">July 7, 2018</a></div>
-                    <div><a href="#">Admin</a></div>
-                  </div>
-                  <h3 class="heading"><a href="#">Even the all-powerful Pointing has no control about the blind texts</a></h3>
-                  <p class="clearfix">
-                    <a href="#" class="float-left">Read more</a>
-                    <a href="#" class="float-right meta-chat"><span class="icon-chat"></span> 3</a>
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div class="item">
-              <div class="blog-entry" data-aos-delay="200">
-                <a href="blog-single.html" class="block-20" style="background-image: url('resources/freelance/turisk/images/image_9.jpg');">
-                </a>
-                <div class="text p-4">
-                  <div class="meta">
-                    <div><a href="#">July 7, 2018</a></div>
-                    <div><a href="#">Admin</a></div>
-                  </div>
-                  <h3 class="heading"><a href="#">Even the all-powerful Pointing has no control about the blind texts</a></h3>
-                  <p class="clearfix">
-                    <a href="#" class="float-left">Read more</a>
-                    <a href="#" class="float-right meta-chat"><span class="icon-chat"></span> 3</a>
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <footer class="ftco-footer ftco-bg-dark ftco-section">
-      <div class="container">
-        <div class="row mb-5">
-          <div class="col-md">
-            <div class="ftco-footer-widget mb-4">
-              <h2 class="ftco-heading-2">Voyage Fellow Tourist</h2>
-              <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</p>
-            </div>
-          </div>
-          <div class="col-md">
-             <div class="ftco-footer-widget mb-4">
-              <h2 class="ftco-heading-2">Book Now</h2>
-              <ul class="list-unstyled">
-                <li><a href="#" class="py-2 d-block">Flight</a></li>
-                <li><a href="#" class="py-2 d-block">Hotels</a></li>
-                <li><a href="#" class="py-2 d-block">Tour</a></li>
-                <li><a href="#" class="py-2 d-block">Car Rent</a></li>
-                <li><a href="#" class="py-2 d-block">Beach &amp; Resorts</a></li>
-                <li><a href="#" class="py-2 d-block">Mountains</a></li>
-                <li><a href="#" class="py-2 d-block">Cruises</a></li>
-              </ul>
-            </div>
-          </div>
-          <div class="col-md">
-             <div class="ftco-footer-widget mb-4">
-              <h2 class="ftco-heading-2">Top Deals</h2>
-              <ul class="list-unstyled">
-                <li><a href="#" class="py-2 d-block">Luxe Hotel</a></li>
-                <li><a href="#" class="py-2 d-block">Venice Tours</a></li>
-                <li><a href="#" class="py-2 d-block">Deluxe Hotels</a></li>
-                <li><a href="#" class="py-2 d-block">Boracay Beach &amp; Resorts</a></li>
-                <li><a href="#" class="py-2 d-block">Beach &amp; Resorts</a></li>
-                <li><a href="#" class="py-2 d-block">Fuente Villa</a></li>
-                <li><a href="#" class="py-2 d-block">Japan Tours</a></li>
-                <li><a href="#" class="py-2 d-block">Philippines Tours</a></li>
-              </ul>
-            </div>
-          </div>
-          <div class="col-md">
-             <div class="ftco-footer-widget mb-4">
-              <h2 class="ftco-heading-2">Contact Information</h2>
-              <ul class="list-unstyled">
-                <li><a href="#" class="py-2 d-block">198 West 21th Street, Suite 721 New York NY 10016</a></li>
-                <li><a href="#" class="py-2 d-block">+ 1235 2355 98</a></li>
-                <li><a href="#" class="py-2 d-block">info@yoursite.com</a></li>
-                <li><a href="#" class="py-2 d-block">email@email.com</a></li>
-              </ul>
-            </div>
-          </div>
-          <div class="col-md">
-            <div class="ftco-footer-widget mb-4">
-              <ul class="ftco-footer-social list-unstyled float-md-right float-lft">
-                <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
-                <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
-                <li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12 text-center">
-
-            <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
-          </div>
-        </div>
-      </div>
-    </footer>
-    
-  
-
-  <!-- loader -->
-  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
-
-  </body>
+			</ul>
+		</div>
+	</div>
 </nav>
+
+<!-- Header -->
+<header class="masthead bg-primary text-white text-center">
+	<div class="container">
+		<img class="img-fluid mb-5 d-block mx-auto"
+			src="resources/freelance/img/profile.png" alt="">
+		<h1 class="text-uppercase mb-0">SICOP Medical Support</h1>
+		<hr class="star-light">
+		<h2 class="font-weight-light mb-0">Web Developer - Graphic Artist
+			- User Experience Designer</h2>
+	</div>
+</header>
+
+<!-- Portfolio Grid Section -->
+<section class="portfolio" id="portfolio">
+	<div class="container">
+		<h2 class="text-center text-uppercase text-secondary mb-0">Botiquin</h2>
+		<hr class="star-dark mb-5">
+		<div class="row">
+			<div class="col-md-6 col-lg-4">
+				<a class="portfolio-item d-block mx-auto" href="#portfolio-modal-1">
+					<div
+						class="portfolio-item-caption d-flex position-absolute h-100 w-100">
+						<div
+							class="portfolio-item-caption-content my-auto w-100 text-center text-white">
+							<i class="fa fa-search-plus fa-3x"></i>
+						</div>
+					</div> <img class="img-fluid"
+					src="resources/freelance/img/portfolio/cabin.png" alt="">
+				</a>
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<a class="portfolio-item d-block mx-auto" href="#portfolio-modal-2">
+					<div
+						class="portfolio-item-caption d-flex position-absolute h-100 w-100">
+						<div
+							class="portfolio-item-caption-content my-auto w-100 text-center text-white">
+							<i class="fa fa-search-plus fa-3x"></i>
+						</div>
+					</div> <img class="img-fluid"
+					src="resources/freelance/img/portfolio/cake.png" alt="">
+				</a>
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<a class="portfolio-item d-block mx-auto" href="#portfolio-modal-3">
+					<div
+						class="portfolio-item-caption d-flex position-absolute h-100 w-100">
+						<div
+							class="portfolio-item-caption-content my-auto w-100 text-center text-white">
+							<i class="fa fa-search-plus fa-3x"></i>
+						</div>
+					</div> <img class="img-fluid"
+					src="resources/freelance/img/portfolio/circus.png" alt="">
+				</a>
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<a class="portfolio-item d-block mx-auto" href="#portfolio-modal-4">
+					<div
+						class="portfolio-item-caption d-flex position-absolute h-100 w-100">
+						<div
+							class="portfolio-item-caption-content my-auto w-100 text-center text-white">
+							<i class="fa fa-search-plus fa-3x"></i>
+						</div>
+					</div> <img class="img-fluid"
+					src="resources/freelance/img/portfolio/game.png" alt="">
+				</a>
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<a class="portfolio-item d-block mx-auto" href="#portfolio-modal-5">
+					<div
+						class="portfolio-item-caption d-flex position-absolute h-100 w-100">
+						<div
+							class="portfolio-item-caption-content my-auto w-100 text-center text-white">
+							<i class="fa fa-search-plus fa-3x"></i>
+						</div>
+					</div> <img class="img-fluid"
+					src="resources/freelance/img/portfolio/safe.png" alt="">
+				</a>
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<a class="portfolio-item d-block mx-auto" href="#portfolio-modal-6">
+					<div
+						class="portfolio-item-caption d-flex position-absolute h-100 w-100">
+						<div
+							class="portfolio-item-caption-content my-auto w-100 text-center text-white">
+							<i class="fa fa-search-plus fa-3x"></i>
+						</div>
+					</div> <img class="img-fluid"
+					src="resources/freelance/img/portfolio/submarine.png" alt="">
+				</a>
+			</div>
+		</div>
+	</div>
+</section>
+
+<!-- About Section -->
+<section class="bg-primary text-white mb-0" id="about">
+	<div class="container">
+		<h2 class="text-center text-uppercase text-white">About</h2>
+		<hr class="star-light mb-5">
+		<div class="row">
+			<div class="col-lg-4 ml-auto">
+				<p class="lead">Freelancer is a free bootstrap theme created by
+					Start Bootstrap. The download includes the complete source files
+					including HTML, CSS, and JavaScript as well as optional LESS
+					stylesheets for easy customization.</p>
+			</div>
+			<div class="col-lg-4 mr-auto">
+				<p class="lead">Whether you're a student looking to showcase
+					your work, a professional looking to attract clients, or a graphic
+					artist looking to share your projects, this template is the perfect
+					starting point!</p>
+			</div>
+		</div>
+		<div class="text-center mt-4">
+			<a class="btn btn-xl btn-outline-light" href="#"> <i
+				class="fa fa-download mr-2"></i> Download Now!
+			</a>
+		</div>
+	</div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact">
+	<div class="container">
+		<h2 class="text-center text-uppercase text-secondary mb-0">Contact
+			Me</h2>
+		<hr class="star-dark mb-5">
+		<div class="row">
+			<div class="col-lg-8 mx-auto">
+				<!-- To configure the contact form email address, go to mail/contact_me.php and update the email address in the PHP file on line 19. -->
+				<!-- The form should work on most web servers, but if the form is not working you may need to configure your web server differently. -->
+				<form name="sentMessage" id="contactForm" novalidate="novalidate">
+					<div class="control-group">
+						<div
+							class="form-group floating-label-form-group controls mb-0 pb-2">
+							<label>Name</label> <input class="form-control" id="name"
+								type="text" placeholder="Name" required="required"
+								data-validation-required-message="Please enter your name.">
+							<p class="help-block text-danger"></p>
+						</div>
+					</div>
+					<div class="control-group">
+						<div
+							class="form-group floating-label-form-group controls mb-0 pb-2">
+							<label>Email Address</label> <input class="form-control"
+								id="email" type="email" placeholder="Email Address"
+								required="required"
+								data-validation-required-message="Please enter your email address.">
+							<p class="help-block text-danger"></p>
+						</div>
+					</div>
+					<div class="control-group">
+						<div
+							class="form-group floating-label-form-group controls mb-0 pb-2">
+							<label>Phone Number</label> <input class="form-control"
+								id="phone" type="tel" placeholder="Phone Number"
+								required="required"
+								data-validation-required-message="Please enter your phone number.">
+							<p class="help-block text-danger"></p>
+						</div>
+					</div>
+					<div class="control-group">
+						<div
+							class="form-group floating-label-form-group controls mb-0 pb-2">
+							<label>Message</label>
+							<textarea class="form-control" id="message" rows="5"
+								placeholder="Message" required="required"
+								data-validation-required-message="Please enter a message."></textarea>
+							<p class="help-block text-danger"></p>
+						</div>
+					</div>
+					<br>
+					<div id="success"></div>
+					<div class="form-group">
+						<button type="submit" class="btn btn-primary btn-xl"
+							id="sendMessageButton">Send</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</section>
+
+<!-- Footer -->
+<footer class="footer text-center">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-4 mb-5 mb-lg-0">
+				<h4 class="text-uppercase mb-4">Location</h4>
+				<p class="lead mb-0">
+					2215 John Daniel Drive <br>Clark, MO 65243
+				</p>
+			</div>
+			<div class="col-md-4 mb-5 mb-lg-0">
+				<h4 class="text-uppercase mb-4">Around the Web</h4>
+				<ul class="list-inline mb-0">
+					<li class="list-inline-item"><a
+						class="btn btn-outline-light btn-social text-center rounded-circle"
+						href="#"> <i class="fa fa-fw fa-facebook"></i>
+					</a></li>
+					<li class="list-inline-item"><a
+						class="btn btn-outline-light btn-social text-center rounded-circle"
+						href="#"> <i class="fa fa-fw fa-google-plus"></i>
+					</a></li>
+					<li class="list-inline-item"><a
+						class="btn btn-outline-light btn-social text-center rounded-circle"
+						href="#"> <i class="fa fa-fw fa-twitter"></i>
+					</a></li>
+					<li class="list-inline-item"><a
+						class="btn btn-outline-light btn-social text-center rounded-circle"
+						href="#"> <i class="fa fa-fw fa-linkedin"></i>
+					</a></li>
+					<li class="list-inline-item"><a
+						class="btn btn-outline-light btn-social text-center rounded-circle"
+						href="#"> <i class="fa fa-fw fa-dribbble"></i>
+					</a></li>
+				</ul>
+			</div>
+			<div class="col-md-4">
+				<h4 class="text-uppercase mb-4">About Freelancer</h4>
+				<p class="lead mb-0">
+					Freelance is a free to use, open source Bootstrap theme created by
+					<a href="http://startbootstrap.com">Start Bootstrap</a>.
+				</p>
+			</div>
+		</div>
+	</div>
+</footer>
+
+<div class="copyright py-4 text-center text-white">
+	<div class="container">
+		<small>Copyright &copy; Your Website 2018</small>
+	</div>
+</div>
+
+<!-- Scroll to Top Button (Only visible on small and extra-small screen sizes) -->
+<div class="scroll-to-top d-lg-none position-fixed ">
+	<a class="js-scroll-trigger d-block text-center text-white rounded"
+		href="#page-top"> <i class="fa fa-chevron-up"></i>
+	</a>
+</div>
+
+<!-- Portfolio Modal 1.1 -->
+<div class="portfolio-modal mfp-hide" id="portfolio-modal-1">
+	<div class="portfolio-modal-dialog bg-white">
+		<a class="close-button d-none d-md-block portfolio-modal-dismiss"
+			href="#"> <i class="fa fa-3x fa-times"></i>
+		</a>
+		<div class="container text-center">
+			<div class="row">
+				<form class="form-horizontal">
+					<div class="col-lg-8 mx-auto">
+						<h2 class="text-secondary text-uppercase mb-0">Reiniciar
+							Procesos</h2>
+						<hr class="star-dark mb-5">
+						<img class="img-fluid mb-5"
+							src="resources/freelance/img/portfolio/cabin.png" alt=""> 	
+						<sec:authorize access="hasRole('ROLE_ADMIN')">	
+						<input
+							id="button-restart-AT" type="button" value="ARMANDO DE TREN!"
+							onclick="doAjaxPostArmadoTren();" class="btn btn-success" />
+						 <br>
+						 <br> 
+						 <input id="button-restart-VE"
+							type="button" value="VERIFICACION DE ERRORES!"
+							onclick="doAjaxPostVerificaErrores();" class="btn btn-success" />
+							
+						</br>
+						</br>
+							
+						<input
+							id="button-restart-CEO" type="button"
+							value="REINICIA PROCESO CEO!" onclick="doAjaxPostReiniciaCEO();"
+							class="btn btn-success" /></br> <br> 
+							
+						</sec:authorize>
+							
+						<br> <input id="button-restart-C0"
+							type="button" value="CARTEL 0!" onclick="doAjaxPostCartel0();"
+							class="btn btn-success" /></br> <br> 
+							
+						
+						<button type="button" class="btn btn-primary" data-toggle="modal"
+							data-target="#exampleModal">Eliminar Equipo</button>
+						<br> <br> 
+						
+						<button type="button" class="btn btn-primary" data-toggle="modal"
+							data-target="#exampleModalEquipos">Eliminar Equipos</button>
+						<br> <br>
+						
+						<button type="button" class="btn btn-primary" data-toggle="modal"
+							data-target="#exampleModalTrenD">Eliminar Tren Duplicado</button>
+						<br> <br> 
+						<a
+							class="btn btn-primary btn-lg rounded-pill portfolio-modal-dismiss"
+							href="#"> <i class="fa fa-close"></i> Salir Reinicia procesos
+						</a>
+
+
+						<div id="subViewDiv"></div>
+						<p class="mb-5">Seccion para el manejo de JHE, reinicio de
+							servicios.</p>
+
+
+
+
+
+						<div id="exampleModal4">
+							<div id="exampleModal2" class="modal fade load-spinner"
+								data-backdrop="static" data-keyboard="false" tabindex="-1">
+								<div id="exampleModal3" class="modal-dialog modal-sm">
+									<div class="modal-content" style="width: 150px; height: 100px">
+										<span class="fa fa-spinner fa-spin fa-3x"></span>
+										<h1 style="font-size: 100%;">Loading ...</h1>
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+
+
+						<input type="hidden" id="inicial" name="inicial" value="" /> <input
+							type="hidden" id="numero" name="numero" value="" />
+
+						<!-- Modal -->
+						<div class="modal fade" id="exampleModal" tabindex="-1"
+							role="dialog" aria-labelledby="exampleModalLabel"
+							aria-hidden="true">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="exampleModalLabel">Eliminar
+											Equipo</h5>
+										<button type="button" class="close" data-dismiss="modal"
+											aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>
+									</div>
+									<div class="modal-body">
+										<table>
+											<tr>
+												<td>Inicial......<input type="text" id="inpt-inicial"
+													name="inicial">
+												</td>
+
+											</tr>
+											<tr>
+												<td>Numero.<input type="text" id="inpt-numero"
+													name="numero">
+												</td>
+											</tr>
+										</table>
+									</div>
+									<div class="modal-footer">
+										<input id="button-restart-EQ" type="button" value="Eliminar"
+											onclick="doAjaxPostEliminaEquipo();" class="btn btn-primary" />
+										<button type="button" class="btn btn-secondary"
+											data-dismiss="modal">Cancelar</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+
+
+
+
+
+						<div class="modal fade" id="exampleModalEquipos" tabindex="-1"
+							role="dialog" aria-labelledby="exampleModalLabel"
+							aria-hidden="true">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="exampleModalLabel">Eliminar
+											Equipos</h5>
+										<button type="button" class="close" data-dismiss="modal"
+											aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>
+									</div>
+									<div class="modal-body">
+										Lista Equipos<br>
+										<textarea id="inpt-unidades" name="unidades" cols="50" rows="10" >InicialNumero,InicialNumero...</textarea>
+									</div>
+									<div class="modal-footer">
+										<input id="button-restart-EQ" type="button" value="Eliminar"
+											onclick="doAjaxPostEliminaEquipos();" class="btn btn-primary" />
+										<button type="button" class="btn btn-secondary"
+											data-dismiss="modal">Cancelar</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						
+						
+						<!-- Modal -->
+						<div class="modal fade" id="exampleModalTrenD" tabindex="-1"
+							role="dialog" aria-labelledby="exampleModalLabel"
+							aria-hidden="true">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="exampleModalLabel">Eliminar
+											Tren DuplicaDO</h5>
+										<button type="button" class="close" data-dismiss="modal"
+											aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>
+									</div>
+									<div class="modal-body">
+										<table>
+											<tr>
+												<td>Tren......<input type="text" id="inpt-tren"
+													name="tren">
+												</td>
+
+											</tr>
+											<tr>
+												<td>Fecha Tren...<input type="text" id="inpt-dia"
+													name="fecTren">
+												</td>
+											</tr>
+											
+											<tr>
+												<td>Estacion(CIR7)<input type="text" id="inpt-estacion"
+													name="estacion">
+												</td>
+											</tr>
+											
+										</table>
+									</div>
+									<div class="modal-footer">
+										<input id="button-restart-EQ" type="button" value="Eliminar"
+											onclick="doAjaxPostEliminaTrenDuplicado();" class="btn btn-primary" />
+										<button type="button" class="btn btn-secondary"
+											data-dismiss="modal">Cancelar</button>
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Portfolio Modal 2 -->
+<div class="portfolio-modal mfp-hide" id="portfolio-modal-2">
+	<div class="portfolio-modal-dialog bg-white">
+		<a class="close-button d-none d-md-block portfolio-modal-dismiss"
+			href="#"> <i class="fa fa-3x fa-times"></i>
+		</a>
+		<div class="container text-center">
+			<div class="row">
+				<c:url var="reiniciaJHE" value="/reiniciaJHE" />
+				<form class="form-horizontal">
+					<div class="col-lg-8 mx-auto">
+						<h2 class="text-secondary text-uppercase mb-0">Reiniciar
+							todos los JHE Procesos</h2>
+						<hr class="star-dark mb-5">
+						<img class="img-fluid mb-5"
+							src="resources/freelance/img/portfolio/cake.png" alt="">
+					<sec:authorize access="hasRole('ROLE_ADMIN')">	
+						 <input
+							id="button-restart-jhe" type="button" value="RESTART ALL JHE!"
+							onclick="doAjaxPostJHE();" class="btn btn-danger" /> <br> <br>
+						<br> 
+						
+					</sec:authorize>
+					
+					<input id="button-status-jhe" type="button"
+							value="STATUS JHE!" onclick="doAjaxPostSTSJHE();"
+							class="btn btn btn-info" /> <br> <br> <br>		
+						<a
+							class="btn btn-primary btn-lg rounded-pill portfolio-modal-dismiss"
+							href="#"> <i class="fa fa-close"></i> Salir Reinicia procesos
+						</a>
+
+						<div id="subViewDiv">
+							<H1>PROCESOS</H1>
+							<H1 class="text-primary">JHE ACTIVOS 75 ::${total75}</H1>
+							<table class="table table-dark">
+								<thead>
+									<tr>
+
+										<th scope="col">Server</th>
+										<th scope="col">Proceso</th>
+										<th scope="col">PID</th>
+										<th scope="col">CPU</th>
+										<th scope="col">MEM</th>
+										<th scope="col">TIME</th>
+
+									</tr>
+								</thead>
+								<tbody>
+
+									<c:forEach items="${listaProcesoDetallado75}" var="estatusJHE"
+										varStatus="tagStatus">
+										<tr>
+											<td>${estatusJHE.server}</td>
+											<td>${estatusJHE.tmiProces}</td>
+											<td>${estatusJHE.pid}</td>
+											<td>${estatusJHE.cpu}</td>
+											<td>${estatusJHE.mem}</td>
+											<td>${estatusJHE.time}</td>
+
+										</tr>
+									</c:forEach>
+								</tbody>
+							</table>
+
+							<H1 class="text-primary">JHE ACTIVOS 76 ::${total76}</H1>
+							<table class="table table-dark">
+								<thead>
+									<tr>
+
+										<th scope="col">Server</th>
+										<th scope="col">Proceso</th>
+										<th scope="col">PID</th>
+										<th scope="col">CPU</th>
+										<th scope="col">MEM</th>
+										<th scope="col">TIME</th>
+
+									</tr>
+								</thead>
+								<tbody>
+
+
+									<c:forEach items="${listaProcesoDetallado76}" var="estatusJHE"
+										varStatus="tagStatus">
+										<tr>
+
+											<td>${estatusJHE.server}</td>
+											<td>${estatusJHE.tmiProces}</td>
+											<td>${estatusJHE.pid}</td>
+											<td>${estatusJHE.cpu}</td>
+											<td>${estatusJHE.mem}</td>
+											<td>${estatusJHE.time}</td>
+
+										</tr>
+									</c:forEach>
+
+								</tbody>
+							</table>
+
+
+							<H1 class="text-primary">JHE ACTIVOS 78 ::${total78}</H1>
+							<table class="table table-dark">
+								<thead>
+									<tr>
+
+										<th scope="col">Server</th>
+										<th scope="col">Proceso</th>
+										<th scope="col">PID</th>
+										<th scope="col">CPU</th>
+										<th scope="col">MEM</th>
+										<th scope="col">TIME</th>
+
+									</tr>
+								</thead>
+								<tbody>
+
+
+									<c:forEach items="${listaProcesoDetallado78}" var="estatusJHE"
+										varStatus="tagStatus">
+										<tr>
+
+											<td>${estatusJHE.server}</td>
+											<td>${estatusJHE.tmiProces}</td>
+											<td>${estatusJHE.pid}</td>
+											<td>${estatusJHE.cpu}</td>
+											<td>${estatusJHE.mem}</td>
+											<td>${estatusJHE.time}</td>
+
+										</tr>
+									</c:forEach>
+
+								</tbody>
+							</table>
+
+							<H1 class="text-primary">JHE ACTIVOS 79 ::${total79}</H1>
+							<table class="table table-dark">
+								<thead>
+									<tr>
+
+										<th scope="col">Server</th>
+										<th scope="col">Proceso</th>
+										<th scope="col">PID</th>
+										<th scope="col">CPU</th>
+										<th scope="col">MEM</th>
+										<th scope="col">TIME</th>
+
+									</tr>
+								</thead>
+								<tbody>
+
+
+									<c:forEach items="${listaProcesoDetallado79}" var="estatusJHE"
+										varStatus="tagStatus">
+										<tr>
+
+											<td>${estatusJHE.server}</td>
+											<td>${estatusJHE.tmiProces}</td>
+											<td>${estatusJHE.pid}</td>
+											<td>${estatusJHE.cpu}</td>
+											<td>${estatusJHE.mem}</td>
+											<td>${estatusJHE.time}</td>
+
+										</tr>
+									</c:forEach>
+
+								</tbody>
+							</table>
+
+
+						</div>
+						<p class="mb-5">Seccion para el manejo de JHE, reinicio de
+							servicios.</p>
+
+						<div class="modal fade load-spinner" data-backdrop="static"
+							data-keyboard="false" tabindex="-1">
+							<div class="modal-dialog modal-sm">
+								<div class="modal-content" style="width: 150px; height: 100px">
+									<span class="fa fa-spinner fa-spin fa-3x"></span>
+									<h1 style="font-size: 100%;">Loading ...</h1>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Portfolio Modal 3 -->
+<div class="portfolio-modal mfp-hide" id="portfolio-modal-3">
+	<div class="portfolio-modal-dialog bg-white">
+		<a class="close-button d-none d-md-block portfolio-modal-dismiss"
+			href="#"> <i class="fa fa-3x fa-times"></i>
+		</a>
+		<div class="container text-center">
+			<div class="row">
+				<form class="form-horizontal">
+					<div class="col-lg-8 mx-auto">
+						<h2 class="text-secondary text-uppercase mb-0">Reiniciar TADS</h2>
+						<hr class="star-dark mb-5">
+						<img class="img-fluid mb-5"
+							src="resources/freelance/img/portfolio/circus.png" alt="">
+						<sec:authorize access="hasRole('ROLE_ADMIN')">
+						<input id="button-restart-tad" type="button" value="RESTART TADS!"
+							onclick="doAjaxPostTAD();" class="btn btn-danger" /> <br> <br>
+						
+						</sec:authorize>
+						
+						<input id="button-status-tad" type="button" value="STATUS TADS!"
+							onclick="doAjaxPostSTSTAD();" class="btn btn btn-info" /><br>
+						<br> 
+						
+						<a class="btn btn-primary btn-lg rounded-pill portfolio-modal-dismiss"
+							href="#"> <i class="fa fa-close"></i> Salir Reinicia TADS
+						</a>
+
+
+						<div id="subViewDivTad">
+							<H1>PROCESOS</H1>
+							<H1 class="text-primary">JHE ACTIVOS 6.80 ::${total680}</H1>
+							<table class="table table-dark">
+								<thead>
+									<tr>
+
+										<th scope="col">Server</th>
+										<th scope="col">Proceso</th>
+										<th scope="col">PID</th>
+										<th scope="col">MEM</th>
+										<th scope="col">TIME</th>
+
+									</tr>
+								</thead>
+								<tbody>
+
+									<c:forEach items="${listaProcesoDetallado680}" var="estatusTAD"
+										varStatus="tagStatus">
+										<tr>
+											<td>${estatusTAD.server}</td>
+											<td>${estatusTAD.tadProces}</td>
+											<td>${estatusTAD.pid}</td>
+											<td>${estatusTAD.mem}</td>
+											<td>${estatusTAD.time}</td>
+
+										</tr>
+									</c:forEach>
+								</tbody>
+							</table>
+
+							<H1 class="text-primary">JHE ACTIVOS 12.80 ::${total1280}</H1>
+							<table class="table table-dark">
+								<thead>
+									<tr>
+
+										<th scope="col">Server</th>
+										<th scope="col">Proceso</th>
+										<th scope="col">PID</th>
+										<th scope="col">MEM</th>
+										<th scope="col">TIME</th>
+
+									</tr>
+								</thead>
+								<tbody>
+
+									<c:forEach items="${listaProcesoDetallado1280}"
+										var="estatusTAD" varStatus="tagStatus">
+										<tr>
+											<td>${estatusTAD.server}</td>
+											<td>${estatusTAD.tadProces}</td>
+											<td>${estatusTAD.pid}</td>
+											<td>${estatusTAD.mem}</td>
+											<td>${estatusTAD.time}</td>
+
+										</tr>
+									</c:forEach>
+								</tbody>
+							</table>
+						</div>
+
+						<div class="modal fade load-spinner" data-backdrop="static"
+							data-keyboard="false" tabindex="-1">
+							<div class="modal-dialog modal-sm">
+								<div class="modal-content" style="width: 150px; height: 100px">
+									<span class="fa fa-spinner fa-spin fa-3x"></span>
+									<h1 style="font-size: 100%;">Loading ...</h1>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Portfolio Modal 4 -->
+<div class="portfolio-modal mfp-hide" id="portfolio-modal-4">
+	<div class="portfolio-modal-dialog bg-white">
+		<a class="close-button d-none d-md-block portfolio-modal-dismiss"
+			href="#"> <i class="fa fa-3x fa-times"></i>
+		</a>
+		<div class="container text-center">
+			<div class="row">
+				<form class="form-horizontal">
+					<div class="col-lg-8 mx-auto">
+						<h2 class="text-secondary text-uppercase mb-0">Reiniciar TADS</h2>
+						<hr class="star-dark mb-5">
+						<img class="img-fluid mb-5"
+							src="resources/freelance/img/portfolio/circus.png" alt="">
+
+						<!-- <input id="button-restart-TA" type="button" value="!RESTART ALL!"
+							onclick="doAjaxPostReiniciaTodo();" class="btn btn-danger" />
+
+
+						<button type="button" class="btn btn-primary btn-lg"
+							data-toggle="modal" data-target="#miModal">Abrir modal</button> -->
+						<div id="subViewDiv"></div>
+						<p class="mb-5">Seccion para el manejo de TADS, reinicio de
+							servicios.</p>
+						<a
+							class="btn btn-primary btn-lg rounded-pill portfolio-modal-dismiss"
+							href="#"> <i class="fa fa-close"></i> Salir Reinicia TADS
+						</a>
+						<div class="modal fade load-spinner" data-backdrop="static"
+							data-keyboard="false" tabindex="-1">
+							<div class="modal-dialog modal-sm">
+								<div class="modal-content" style="width: 150px; height: 100px">
+									<span class="fa fa-spinner fa-spin fa-3x"></span>
+									<h1 style="font-size: 100%;">Loading ...</h1>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Portfolio Modal 5 -->
+<div class="portfolio-modal mfp-hide" id="portfolio-modal-5">
+	<div class="portfolio-modal-dialog bg-white">
+		<a class="close-button d-none d-md-block portfolio-modal-dismiss"
+			href="#"> <i class="fa fa-3x fa-times"></i>
+		</a>
+		<div class="container text-center">
+			<div class="row">
+				<div class="col-lg-8 mx-auto">
+					<h2 class="text-secondary text-uppercase mb-0">Project Name</h2>
+					<hr class="star-dark mb-5">
+					<img class="img-fluid mb-5"
+						src="resources/freelance/img/portfolio/safe.png" alt="">
+					<p class="mb-5">Lorem ipsum dolor sit amet, consectetur
+						adipisicing elit. Mollitia neque assumenda ipsam nihil, molestias
+						magnam, recusandae quos quis inventore quisquam velit asperiores,
+						vitae? Reprehenderit soluta, eos quod consequuntur itaque. Nam.</p>
+					<a
+						class="btn btn-primary btn-lg rounded-pill portfolio-modal-dismiss"
+						href="#"> <i class="fa fa-close"></i> Close Project
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Portfolio Modal 6 -->
+<div class="portfolio-modal mfp-hide" id="portfolio-modal-6">
+	<div class="portfolio-modal-dialog bg-white">
+		<a class="close-button d-none d-md-block portfolio-modal-dismiss"
+			href="#"> <i class="fa fa-3x fa-times"></i>
+		</a>
+		<div class="container text-center">
+			<div class="row">
+				<div class="col-lg-8 mx-auto">
+					<h2 class="text-secondary text-uppercase mb-0">Project Name</h2>
+					<hr class="star-dark mb-5">
+					<img class="img-fluid mb-5"
+						src="resources/freelance/img/portfolio/submarine.png" alt="">
+					<p class="mb-5">Lorem ipsum dolor sit amet, consectetur
+						adipisicing elit. Mollitia neque assumenda ipsam nihil, molestias
+						magnam, recusandae quos quis inventore quisquam velit asperiores,
+						vitae? Reprehenderit soluta, eos quod consequuntur itaque. Nam.</p>
+					<a
+						class="btn btn-primary btn-lg rounded-pill portfolio-modal-dismiss"
+						href="#"> <i class="fa fa-close"></i> Close Project
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

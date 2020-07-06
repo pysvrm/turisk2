@@ -31,7 +31,7 @@
 		</triggeringPolicy>
 	</appender>
 
-	<logger name="mx.com.vrm.viai" level="INFO" additivity="false">
+	<logger name="mx.com.vrm.turisk" level="INFO" additivity="false">
 		<appender-ref ref="STDOUT" />
 		<appender-ref ref="FILE" />
 	</logger>
