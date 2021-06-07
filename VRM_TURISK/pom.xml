@@ -30,7 +30,7 @@
 		<logback.classic>1.1.2</logback.classic>
 		<slf4j-api>1.7.7</slf4j-api>
 		<quartz-api>2.3.2</quartz-api>
-		<logback.core>1.1.2</logback.core>
+		<logback.core>1.2.0</logback.core>
 		<jackson.version>2.9.5</jackson.version>
 		<jwt.version>0.9.0</jwt.version>
 		<maven.compiler.source>1.6</maven.compiler.source>
