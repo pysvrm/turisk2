@@ -27,7 +27,7 @@
 		<jsp.api>2.1</jsp.api>
 		<jstl.api>1.2</jstl.api>
 		<javax.persistence>2.1.1</javax.persistence>
-		<logback.classic>1.1.2</logback.classic>
+		<logback.classic>1.2.0</logback.classic>
 		<slf4j-api>1.7.7</slf4j-api>
 		<quartz-api>2.3.2</quartz-api>
 		<logback.core>1.1.2</logback.core>
